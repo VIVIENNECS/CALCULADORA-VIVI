@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Divertida de Operaciones</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to right, #f7d794, #f8a5c2);
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 2.5rem;
+    }
+    .calculator {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+    input, button {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      border: 2px solid #f8a5c2;
+      border-radius: 10px;
+      background-color: #fef6e4;
+    }
+    .result, .score {
+      font-size: 1.4rem;
+      margin-top: 1rem;
+      color: #34495e;
+    }
+    .animal-img {
+      width: 80px;
+      height: 80px;
+      margin: 10px auto;
+    }
+    .question {
+      font-size: 1.6rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐶 Calculadora Divertida 🦊</h1>
+  <div class="calculator">
+    <img class="animal-img" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Animal divertido">
+    <div class="question" id="question"></div>
+    <input type="number" id="answer" placeholder="Tu respuesta" />
+    <br>
+    <button onclick="verificarRespuesta()">Verificar</button>
+    <div class="result" id="result"></div>
+    <div class="score" id="score">Puntos: 0</div>
+  </div>
+
+  <script>
+    let puntos = 0;
+    let respuestaCorrecta = 0;
+
+    function generarPregunta() {
+      const operaciones = ['+', '-', '*', '/'];
+      const op = operaciones[Math.floor(Math.random() * operaciones.length)];
+      let num1 = Math.floor(Math.random() * 10) + 1;
+      let num2 = Math.floor(Math.random() * 10) + 1;
+
+      if (op === '-') {
+        if (num2 > num1) [num1, num2] = [num2, num1];
+      } else if (op === '/') {
+        num1 = num1 * num2; // asegurar división exacta
+      }
+
+      respuestaCorrecta = eval(`${num1} ${op} ${num2}`);
+      document.getElementById('question').innerText = `¿Cuánto es ${num1} ${op} ${num2}?`;
+    }
+
+    function verificarRespuesta() {
+      const respuestaUsuario = parseFloat(document.getElementById('answer').value);
+      const resultDiv = document.getElementById('result');
+      const scoreDiv = document.getElementById('score');
+
+      if (respuestaUsuario === respuestaCorrecta) {
+        puntos += 5;
+        resultDiv.innerText = '✅ ¡Correcto! +5 puntos';
+      } else {
+        resultDiv.innerText = `❌ Incorrecto. La respuesta era ${respuestaCorrecta}`;
+      }
+
+      scoreDiv.innerText = `Puntos: ${puntos}`;
+      document.getElementById('answer').value = '';
+
+      if (puntos >= 100) {
+        alert('🎉 ¡Felicidades, ganaste! 🎉');
+        puntos = 0;
+        scoreDiv.innerText = 'Puntos: 0';
+      }
+
+      generarPregunta();
+    }
+
+    // Inicializar primera pregunta
+    generarPregunta();
+  </script>
+</body>
+</html>
